@@ -7,19 +7,12 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
-        /* === CSS VARIABLES === */
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             --text-primary: #2d3748;
             --text-secondary: #4a5568;
-            --success-color: #48bb78;
-            --error-color: #f56565;
-            --border-radius: 20px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .dark-theme {
@@ -29,7 +22,6 @@
             --text-secondary: #e2e8f0;
         }
 
-        /* === BASE STYLES === */
         * {
             margin: 0;
             padding: 0;
@@ -37,364 +29,150 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--primary-gradient);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            transition: var(--transition);
         }
 
-        /* === GLASS CONTAINER === */
         .glass-container {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius);
+            border-radius: 20px;
             padding: 40px 30px;
-            box-shadow: var(--glass-shadow);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             max-width: 450px;
             width: 100%;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        .glass-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 3s infinite;
-        }
-
-        /* === HEADER SECTION === */
-        .header {
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .icon-container {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: bounce 2s infinite;
-        }
-
-        .icon-container svg {
-            width: 40px;
-            height: 40px;
-            color: white;
         }
 
         .header h1 {
             color: var(--text-primary);
             margin-bottom: 12px;
             font-size: 28px;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .header p {
             color: var(--text-secondary);
             font-size: 16px;
             line-height: 1.5;
-            opacity: 0.9;
-        }
-
-        /* === CAPTCHA SECTION === */
-        .captcha-section {
-            margin: 30px 0;
-            position: relative;
-            z-index: 2;
         }
 
         .captcha-container {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 16px;
             padding: 30px 20px;
-            margin: 20px 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin: 30px 0;
             min-height: 150px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
         }
 
         .dark-theme .captcha-container {
             background: rgba(0, 0, 0, 0.3);
         }
 
-        /* === STATUS MESSAGES === */
         .status-message {
             margin: 20px 0;
             padding: 16px 20px;
             border-radius: 12px;
             font-weight: 500;
-            font-size: 14px;
             display: none;
-            animation: fadeIn 0.5s ease-out;
-            position: relative;
-            z-index: 2;
-        }
-
-        .status-loading {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
 
         .status-success {
             background: rgba(72, 187, 120, 0.1);
-            color: var(--success-color);
+            color: #48bb78;
             border: 1px solid rgba(72, 187, 120, 0.2);
             display: block;
         }
 
-        .status-error {
-            background: rgba(245, 101, 101, 0.1);
-            color: var(--error-color);
-            border: 1px solid rgba(245, 101, 101, 0.2);
-            display: block;
-        }
-
-        /* === LOADING ANIMATION === */
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top: 2px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        /* === FOOTER === */
         .footer {
             margin-top: 25px;
             padding-top: 25px;
             border-top: 1px solid var(--glass-border);
-            position: relative;
-            z-index: 2;
         }
 
         .footer p {
             color: var(--text-secondary);
             font-size: 13px;
-            line-height: 1.5;
-            opacity: 0.8;
         }
 
-        /* === ANIMATIONS === */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: rotate(45deg) translateX(-100%);
-            }
-            100% {
-                transform: rotate(45deg) translateX(100%);
-            }
-        }
-
-        @keyframes successPulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(72, 187, 120, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
-            }
-        }
-
-        /* === RESPONSIVE DESIGN === */
         @media (max-width: 480px) {
             .glass-container {
-                margin: 10px;
                 padding: 30px 20px;
             }
-            
             .header h1 {
                 font-size: 24px;
             }
-            
-            .icon-container {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .icon-container svg {
-                width: 35px;
-                height: 35px;
-            }
-        }
-
-        /* === TURNSTILE CUSTOMIZATION === */
-        .cf-turnstile {
-            transform: scale(0.95);
-            transition: var(--transition);
-        }
-
-        .cf-turnstile:hover {
-            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
     <div class="glass-container">
-        <!-- Header Section -->
         <div class="header">
-            <div class="icon-container">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-            </div>
             <h1>🔒 Проверка безопасности</h1>
-            <p>Подтвердите, что вы не робот, чтобы продолжить использование бота</p>
+            <p>Подтвердите, что вы не робот для доступа к FreeStar</p>
         </div>
 
-        <!-- Captcha Section -->
-        <div class="captcha-section">
-            <div class="captcha-container" id="captchaContainer">
-                <div id="turnstile-widget"></div>
-            </div>
-            
-            <!-- Status Messages -->
-            <div class="status-message status-loading" id="loadingStatus">
-                <div class="loading-spinner"></div>
-                <span>Загрузка системы проверки...</span>
-            </div>
-            
-            <div class="status-message status-success" id="successStatus">
-                ✅ Проверка пройдена! Закрываем окно...
-            </div>
-            
-            <div class="status-message status-error" id="errorStatus">
-                ❌ Ошибка проверки. Пожалуйста, попробуйте снова.
-            </div>
+        <div class="captcha-container" id="captchaContainer">
+            <div id="turnstile-widget"></div>
+        </div>
+        
+        <div class="status-message status-success" id="successStatus">
+            ✅ Проверка пройдена! Возвращайтесь в бота...
         </div>
 
-        <!-- Footer -->
         <div class="footer">
-            <p>После успешной проверки вы автоматически продолжите работу с ботом</p>
+            <p>После проверки закройте это окно и вернитесь в бота</p>
         </div>
     </div>
 
     <script>
         // ==================== CONFIGURATION ====================
-        // 🔑 ЗАМЕНИТЕ ЭТОТ КЛЮЧ НА ВАШ САЙТ-КЛЮЧ ИЗ CLOUDFLARE TURNSTILE
-        const TURNSTILE_SITE_KEY = '0x4AAAAAAB_o4QjXA0Sj-eH-'; // ЗАМЕНИТЕ НА РЕАЛЬНЫЙ КЛЮЧ
+        const TURNSTILE_SITE_KEY = '0x4AAAAAAB_o4QjXA0Sj-eH-';
         
         // ==================== TELEGRAM WEBAPP INIT ====================
         const tg = window.Telegram.WebApp;
         
+        // Переменная для отслеживания статуса проверки
+        let isCaptchaPassed = false;
+        let turnstileWidgetId;
+
         // Инициализация Telegram WebApp
         function initTelegramWebApp() {
-            tg.expand(); // Раскрываем на весь экран
-            tg.enableClosingConfirmation(); // Предупреждение при закрытии
-            tg.BackButton.hide(); // Скрываем кнопку назад
+            tg.expand();
+            tg.enableClosingConfirmation();
+            tg.BackButton.hide();
             
-            // Применяем тему Telegram
+            // Применяем тему
             applyTheme(tg.themeParams);
-            
-            // Слушаем изменения темы
             tg.onEvent('themeChanged', applyTheme);
             
-            console.log('Telegram WebApp initialized for user:', tg.initDataUnsafe.user);
+            console.log('FreeStar WebApp initialized for user:', tg.initDataUnsafe.user);
         }
-        
-        // ==================== THEME MANAGEMENT ====================
+
+        // Применение темы
         function applyTheme(themeParams) {
             const isDark = themeParams?.bg_color ? 
-                getColorBrightness(themeParams.bg_color) < 128 : 
-                false;
-            
+                getColorBrightness(themeParams.bg_color) < 128 : false;
             document.body.classList.toggle('dark-theme', isDark);
-            
-            // Динамическое обновление CSS переменных из themeParams
-            if (themeParams) {
-                document.documentElement.style.setProperty('--text-primary', themeParams.text_color || '#2d3748');
-                document.documentElement.style.setProperty('--text-secondary', themeParams.hint_color || '#4a5568');
-            }
         }
-        
+
         function getColorBrightness(hexColor) {
-            // Конвертируем hex в RGB и вычисляем яркость
             const r = parseInt(hexColor.substr(1, 2), 16);
             const g = parseInt(hexColor.substr(3, 2), 16);
             const b = parseInt(hexColor.substr(5, 2), 16);
             return (r * 299 + g * 587 + b * 114) / 1000;
         }
-        
+
         // ==================== TURNSTILE MANAGEMENT ====================
-        let turnstileWidgetId;
-        
         function initTurnstile() {
-            if (!TURNSTILE_SITE_KEY || TURNSTILE_SITE_KEY.includes('000000000000')) {
-                showError('Не настроен ключ Turnstile. Пожалуйста, настройте TURNSTILE_SITE_KEY.');
-                return;
-            }
-            
             try {
                 turnstileWidgetId = turnstile.render('#turnstile-widget', {
                     sitekey: TURNSTILE_SITE_KEY,
@@ -404,44 +182,28 @@
                     refreshExpired: 'auto',
                     language: 'ru',
                     
-                    // Callback при успешной проверке
                     callback: function(token) {
-                        console.log('Turnstile token received:', token);
+                        console.log('Turnstile token received');
                         onCaptchaSuccess(token);
                     },
                     
-                    // Callback при ошибке
                     'error-callback': function() {
-                        console.error('Turnstile error occurred');
-                        showError('Ошибка загрузки проверки. Пожалуйста, обновите страницу.');
-                    },
-                    
-                    // Callback при таймауте
-                    'timeout-callback': function() {
-                        console.warn('Turnstile timeout');
-                        showError('Время проверки истекло. Пожалуйста, попробуйте снова.');
-                    },
-                    
-                    // Callback при отзыве
-                    'expired-callback': function() {
-                        console.log('Turnstile token expired');
-                        showStatus('loading', 'Токен истёк. Обновляем проверку...');
+                        console.error('Turnstile error');
+                        showError('Ошибка загрузки проверки');
                     }
                 });
                 
-                showStatus('loading', 'Система проверки загружается...');
-                
             } catch (error) {
                 console.error('Turnstile initialization error:', error);
-                showError('Ошибка инициализации проверки. Пожалуйста, обновите страницу.');
+                showError('Ошибка инициализации проверки');
             }
         }
-        
+
         // ==================== CAPTCHA SUCCESS HANDLER ====================
         function onCaptchaSuccess(token) {
-            showStatus('loading', 'Проверяем результат...');
+            isCaptchaPassed = true;
             
-            // Создаем данные для отправки
+            // Сразу отправляем данные в бота
             const verificationData = {
                 action: 'captcha_verify',
                 token: token,
@@ -452,107 +214,98 @@
             };
             
             try {
-                // Отправляем данные в Telegram бот
                 tg.sendData(JSON.stringify(verificationData));
+                console.log('Verification data sent to bot');
                 
-                // Показываем успех
-                showStatus('success', '✅ Проверка пройдена! Закрываем окно...');
+                // Показываем сообщение об успехе
+                document.getElementById('successStatus').style.display = 'block';
                 
-                // Добавляем анимацию успеха
-                document.getElementById('captchaContainer').style.animation = 'successPulse 2s infinite';
-                
-                // Закрываем WebApp через 2 секунды
+                // Автоматически закрываем через 2 секунды
                 setTimeout(() => {
                     tg.close();
                 }, 2000);
                 
-                console.log('Verification data sent successfully:', verificationData);
-                
             } catch (error) {
                 console.error('Error sending data to Telegram:', error);
-                showError('❌ Ошибка отправки данных. Попробуйте снова.');
+                showError('Ошибка отправки данных');
+            }
+        }
+
+        // ==================== CLOSE HANDLER ====================
+        // Обработчик закрытия вкладки - отправляем статус даже если капча не пройдена
+        window.addEventListener('beforeunload', function() {
+            if (!isCaptchaPassed) {
+                // Если пользователь закрыл вкладку без прохождения капчи
+                const closeData = {
+                    action: 'webapp_closed',
+                    user_id: tg.initDataUnsafe.user?.id,
+                    timestamp: Date.now(),
+                    captcha_passed: false
+                };
                 
-                // Перезагружаем Turnstile при ошибке
-                setTimeout(() => {
-                    if (turnstileWidgetId) {
-                        turnstile.reset(turnstileWidgetId);
-                    }
-                }, 3000);
-            }
-        }
-        
-        // ==================== STATUS MANAGEMENT ====================
-        function showStatus(type, message) {
-            // Скрываем все статусы
-            document.getElementById('loadingStatus').style.display = 'none';
-            document.getElementById('successStatus').style.display = 'none';
-            document.getElementById('errorStatus').style.display = 'none';
-            
-            // Показываем нужный статус
-            const statusElement = document.getElementById(type + 'Status');
-            if (statusElement) {
-                if (message) {
-                    const textElement = statusElement.querySelector('span') || statusElement;
-                    textElement.textContent = message;
+                try {
+                    tg.sendData(JSON.stringify(closeData));
+                    console.log('WebApp closed without captcha completion');
+                } catch (error) {
+                    console.error('Error sending close data:', error);
                 }
-                statusElement.style.display = type === 'loading' ? 'flex' : 'block';
             }
-        }
-        
-        function showError(message) {
-            showStatus('error', message);
-            
-            // Автоматическое скрытие ошибки через 5 секунд
-            setTimeout(() => {
-                showStatus('loading', 'Повторная попытка...');
-                if (turnstileWidgetId) {
-                    turnstile.reset(turnstileWidgetId);
+        });
+
+        // Обработчик видимости страницы (когда пользователь переключает вкладки)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && !isCaptchaPassed) {
+                // Пользователь переключил вкладку - отправляем статус
+                const visibilityData = {
+                    action: 'webapp_minimized',
+                    user_id: tg.initDataUnsafe.user?.id,
+                    timestamp: Date.now()
+                };
+                
+                try {
+                    tg.sendData(JSON.stringify(visibilityData));
+                    console.log('WebApp minimized');
+                } catch (error) {
+                    console.error('Error sending visibility data:', error);
                 }
-            }, 5000);
-        }
-        
+            }
+        });
+
         // ==================== UTILITY FUNCTIONS ====================
         function generateSessionId() {
             return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
         }
-        
+
+        function showError(message) {
+            alert(message);
+        }
+
         function isInTelegramWebView() {
             return !!(window.Telegram && window.Telegram.WebApp);
         }
-        
+
         // ==================== INITIALIZATION ====================
         document.addEventListener('DOMContentLoaded', function() {
-            // Проверяем, что мы в Telegram WebApp
             if (!isInTelegramWebView()) {
                 showError('Эта страница должна открываться через Telegram бота');
                 return;
             }
-            
-            // Проверяем наличие пользователя
+
             if (!tg.initDataUnsafe.user) {
                 showError('Не удалось получить данные пользователя');
                 return;
             }
-            
-            // Инициализируем приложение
+
             initTelegramWebApp();
             
-            // Даем время на рендеринг перед инициализацией Turnstile
             setTimeout(() => {
                 initTurnstile();
             }, 500);
         });
-        
-        // ==================== ERROR HANDLING ====================
+
+        // Обработка ошибок
         window.addEventListener('error', function(e) {
             console.error('Global error:', e);
-            showError('Произошла непредвиденная ошибка. Пожалуйста, обновите страницу.');
-        });
-        
-        // Обработка обещаний без catch
-        window.addEventListener('unhandledrejection', function(e) {
-            console.error('Unhandled promise rejection:', e);
-            showError('Ошибка в работе приложения. Пожалуйста, обновите страницу.');
         });
     </script>
 </body>
